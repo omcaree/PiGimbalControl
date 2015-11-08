@@ -74,6 +74,8 @@ void processChannels(double channels[XBUS_CHANNELS]) {
 			#endif
 			/* Stop recording by killing the raspivid process */
 			system("killall raspivid");
+			/* Make sure video is saved to card (should be safe to depower) */
+			system("sync");
 		}
 		sw1Last = sw1;
 	}
@@ -104,7 +106,7 @@ void  readSerialPort(void) {
 	/* Read XBus input indefinitely */
 	while (1) {
 		/* Get a character from the serial port */
-		n = read(fd, &buff, 1);
+		int n = read(fd, &buff, 1);
 		
 		/* If we have new data, process it */
 		if (n == 1) {
